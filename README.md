@@ -111,6 +111,9 @@ Basically the same environment variables for the database, mqqt and timezone nee
 | **TESLAMATE_PORT**            | string  | _4000_                        |
 | **API_TOKEN**                 | string  |                               |
 | **API_TOKEN_DISABLE**         | string  | _false_                       |
+| **EXPORT_CURSOR_SECRET**      | string  | _ENCRYPTION_KEY_              |
+| **EXPORT_QUERY_TIMEOUT**      | integer | _30000_                       |
+| **EXPORT_MAX_CONCURRENT_QUERIES** | integer | _2_                       |
 | **DATABASE_PORT**             | integer | _5432_                        |
 | **DATABASE_TIMEOUT**          | integer | _60000_                       |
 | **DATABASE_SSL**              | string  | _disable_                     |
@@ -177,6 +180,15 @@ More detailed documentation of every endpoint will come..
     - `minDistance` (optional, filter by minimum trip distance, units based on TeslaMate settings)
     - `maxDistance` (optional, filter by maximum trip distance, units based on TeslaMate settings)
 - GET `/api/v1/cars/:CarID/drives/:DriveID`
+- GET `/api/v1/cars/:CarID/export/manifest`
+- GET `/api/v1/cars/:CarID/export/drive-samples`
+  - Supported parameters:
+    - `cursor` (required, returned by the export manifest)
+    - `limit` (optional, default 5000, maximum 10000)
+- GET `/api/v1/cars/:CarID/export/charge-samples`
+  - Supported parameters:
+    - `cursor` (required, returned by the export manifest)
+    - `limit` (optional, default 5000, maximum 10000)
 - GET `/api/v1/cars/:CarID/parkings`
   - Supported parameters:
     - `startDate` (optional, use canonical UTC format in RFC3339)
@@ -197,6 +209,8 @@ More detailed documentation of every endpoint will come..
 
 > [!TIP]
 > Canonical UTC format in RFC3339, e.g. `2006-01-02T15:04:05Z` or `2006-01-02T15:04:05+07:00`
+
+See [Export API](docs/export-api.md) for the bounded export flow, canonical units, cursor guarantees, and strict error contract.
 
 ### Authentication
 

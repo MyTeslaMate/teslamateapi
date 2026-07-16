@@ -22,6 +22,7 @@ import (
 const (
 	exportRequestIDHeader     = "X-Request-ID"
 	exportRequestIDContextKey = "teslamateapi_export_request_id"
+	exportProblemTypeBase     = "https://github.com/MyTeslaMate/teslamateapi/blob/main/docs/export-api.md#problem-"
 )
 
 var (
@@ -85,6 +86,7 @@ func exportAuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
+		c.Header("WWW-Authenticate", "Bearer")
 		writeExportProblem(c, exportProblemSpec{
 			Status:    http.StatusUnauthorized,
 			Code:      "unauthorized",
@@ -102,7 +104,7 @@ func writeExportProblem(c *gin.Context, spec exportProblemSpec) {
 	}
 	requestID := exportRequestID(c)
 	problem := exportProblem{
-		Type:      "/api/problems/" + spec.Code,
+		Type:      exportProblemTypeBase + strings.ReplaceAll(spec.Code, "_", "-"),
 		Title:     spec.Title,
 		Status:    spec.Status,
 		Detail:    spec.Detail,

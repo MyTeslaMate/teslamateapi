@@ -45,6 +45,9 @@ func TestExportProblemUsesStatusAndMachineReadableContract(t *testing.T) {
 	if problem.Status != recorder.Code || problem.Code != "invalid_cursor" || problem.RequestID != requestID {
 		t.Fatalf("unexpected problem: %#v", problem)
 	}
+	if problem.Type != exportProblemTypeBase+"invalid-cursor" {
+		t.Fatalf("problem type: got %q", problem.Type)
+	}
 }
 
 func TestExportRecoveryRedactsPanic(t *testing.T) {
