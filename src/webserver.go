@@ -152,6 +152,14 @@ func main() {
 			v1.GET("/cars/:CarID/drives", TeslaMateAPICarsDrivesV1)
 			v1.GET("/cars/:CarID/drives/:DriveID", TeslaMateAPICarsDrivesDetailsV1)
 
+			// v1 /api/v1/cars/:CarID/export endpoints
+			registerTeslaMateAPIExportRoutes(
+				v1,
+				&sqlExportRepository{db: db},
+				exportCursorKeyFromEnv(),
+				exportRuntimeConfigFromEnv(),
+			)
+
 			// v1 /api/v1/cars/:CarID/parkings endpoints
 			v1.GET("/cars/:CarID/parkings", TeslaMateAPICarsParkingsV1)
 
